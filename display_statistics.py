@@ -47,16 +47,3 @@ print ' '
 print 'Average tweets per user: %f' % tweets_avg
 print 'Minimum tweets per user: %d' % tweets_min
 print 'Maximum tweets per user: %d' % tweets_max 
-
-
-# Construct key of Hashtable(Dictionary)
-# user_friendship = defaultdict(list)
-# # for i in range(0, len(u), 4):
-# # 	user_id = u[i].split('\n')[0]
-# # 	user_friendship[user_id] = {}
-
-# # Construct value of Hashtable
-# for i in range(0, len(f), 3):
-# 	user_id = f[i].split('\n')[0]
-# 	friend_id = f[i+1].split('\n')[0]
-# 	user_friendship[user_id].append(friend_id)
