@@ -25,3 +25,5 @@ def make_word_user_dic(data, num_line, space):
 word_user_dic = make_word_user_dic(w, 4, 2)
 word = raw_input("type the word tweeted:")
 user_list = word_user_dic[word]
+
+print user_list
