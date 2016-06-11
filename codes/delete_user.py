@@ -28,11 +28,10 @@ def make_word_user_dic(data, num_line, space):
 	return dic
 
 all_users = make_user_list(u, 4)
-print all_users
+
 word_user_dic = make_word_user_dic(w, 4, 2)
 word = raw_input("type the word tweeted:")
 user_list = word_user_dic[word]
-print user_list
 
 for i in range(len(user_list)):
 	all_users.remove(user_list[i])
