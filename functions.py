@@ -1,6 +1,6 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 import numpy as np 
-reload(sys)
+from scc import *
 
 def readtxt(file):
 	f = open(file,'r')
@@ -15,6 +15,16 @@ def make_dic(data, num_line, space):
 	for i in range(0, len(data), num_line):
 		key = data[i].split('\n')[0]
 		value = data[i+space].split('\n')[0]
+		dic[key].append(value)
+	return dic
+
+# Construct word_user_dict(key=word, value=user)
+def make_word_user_dic(data, num_line, space):
+	dic = defaultdict(list)
+	# append values
+	for i in range(0, len(data), num_line):
+		key = data[i+space].split('\n')[0]
+		value = data[i].split('\n')[0]
 		dic[key].append(value)
 	return dic
 
@@ -35,72 +45,46 @@ def stat(dic):
 	maximum = max(num_list)
 	return avg, minimum, maximum
 
-# Construct word_dict(key=word, value=count)
-def make_count_dic(data, num_line, space):
-	dic = defaultdict(list)
-	# append values
-	for i in range(0, len(data), num_line):
-		key = data[i+space].split('\n')[0]
-		dic[key] = 0
-	for i in range(0, len(data), num_line):
-		key = data[i+space].split('\n')[0]
-		dic[key] += 1
-	return dic
-
-def extract_value(dic):
+def extract_num_value(dic):
 	value_list = []
-	for key in dic:
-		# key = key.encode('utf-8')
-		value_list.append(dic[key])
+	for key in dic.keys():
+		v = len(dic[key])
+		value_list.append(v)
 	return value_list
 
-def extract_top5(dic, count_list):
+def extract_top5(key_list, index_list):
 	top5_list = []
-	for i in range(500):
-		top5_list.append(dic.keys()[dic.values().index(count_list[i])])
+	for i in range(5):
+		j = int(index_list[i])
+		top5_list.append(key_list[j])
 	return top5_list
 
-# Construct word_user_dict(key=word, value=user)
-def make_word_user_dic(data, num_line, space):
-	dic = defaultdict(list)
-	# append values
-	for i in range(0, len(data), num_line):
-		key = data[i+space].split('\n')[0]
-		value = data[i].split('\n')[0]
-		dic[key].append(value)
-	return dic
+def make_dfsvertex(dic):
+	i=0
+	vertices = []
+	for key in dic.keys():
+		key = DFSVertex()
+		vertices.append(key)
+		key.name = key
+		key.n = i
+		i+=1	
+	return vertices
 
-# heapsort
-def parent(n):
-	return (n-1)/2
+def make_print_scc(dic):
+	vertices = []
+	for key in dic.keys():
+		vertex = DFSVertex(key)
+		vertices.append(vertex)
 
-def left(n):
-	return 2*n+1
+	DFS = DepthFirstSearch()
+	DFS.set_vertices(vertices)
 
-def right(n):
-	return 2*n+2
+	for vertex in vertices:
+		friends = dic[vertex.name]
+		for friend in friends:
+			for node in vertices:
+				if friend == node.name: 
+					vertex.add(node)
+	DFS.scc()
 
-def heapify(A, i, heapsize):
-	l = left(i) 
-	r = right(i)
-	if l < heapsize and A[l] < A[i]:
-		largest = l
-	else:
-		largest = i
-	if r < heapsize and A[r] < A[largest]:
-		largest = r
-	if largest !=i:
-		A[i], A[largest] = A[largest], A[i]
-		heapify(A, largest, heapsize)
-	return A
-
-def buildheap(A):
-	for i in range(len(A)/2+1, 0, -1):
-		heapify(A, i-1, len(A))
-
-def heapsort(A):
-	buildheap(A)
-	for i in range(len(A), 1, -1):
-		A[i-1],A[0] = A[0],A[i-1]
-		heapify(A,0,i-1)
-	return A
+def shortest_path()

@@ -1,29 +1,22 @@
 from functions import *
+from scc import *
+import numpy as np 
 
-#read txt file
-u = readtxt('user.txt')
-f = readtxt('friend.txt')
-w = readtxt('word.txt')
-
-def read_data_file():
+def read_data_file(user_friendship, tweet_dic):
 	# count number of users
-	user = int(round(len(u)/4) + 1)
-	friendship = int(round(len(f)/3) + 1)
-	tweets = int(round(len(w)/4) + 1)
+	user = len(user_friendship)
+	friendship = sum(len(v) for v in user_friendship.itervalues())
+	tweets = sum(len(v) for v in tweet_dic.itervalues())
 
 	# print the results
 	print "Total users: %d" %user
 	print "Total friendship records: %d" %friendship
 	print "Total tweets: %d" %tweets
 
-def display_statistics():
-	# Construct Hashtable(Dictionary)(key=user, value=friend, word for each)
-	user_friendship = make_dic(f, 3, 1)
-	tweet_list = make_dic(w, 4, 2)
-
+def display_statistics(user_friendship, tweet_dic):
 	# Count the number of the values
 	friend_avg, friend_min, friend_max = stat(user_friendship)
-	tweets_avg, tweets_min, tweets_max = stat(tweet_list)
+	tweets_avg, tweets_min, tweets_max = stat(tweet_dic)
 
 	print 'Average number of friends: %f' % friend_avg
 	print 'Minimum friends: %d' % friend_min
@@ -33,39 +26,31 @@ def display_statistics():
 	print 'Minimum tweets per user: %d' % tweets_min
 	print 'Maximum tweets per user: %d' % tweets_max 
 
-def top5_words():
-	# Construct word_dict(key=word, value=count)
-	word_dict = make_count_dic(w, 4, 2)
-	# Extract the values
-	word_count_list = extract_value(word_dict)
-	# Heap sort the list
-	word_count_list = heapsort(word_count_list)
+def top5(dic):
+	key_list = []
+	for key in dic.keys():
+		key_list.append(key)
+	# Extract the number of values and sort and get the indices 
+	count_list = extract_num_value(dic)
+	index_list = range(len(count_list))
+	index_list.sort(key=lambda n:count_list[n])
+	index_list.reverse()
 	# Find the top 5 words
-	top5_word = extract_top5(word_dict, word_count_list)
-	print top5_word
+	top5 = extract_top5(key_list, index_list)
+	print top5
 
-def top5_users():
-	return 0
-
-def find_users():
-	# Construct word_user_dict(key=word, value=user)
-	word_user_dic = make_word_user_dic(w, 4, 2)
+def find_users(dic):
  	# Get the word to be searched
 	word = raw_input("type the word tweeted:")
 	# Find the users who tweeted word
-	user_list = word_user_dic[word]
+	user_list = dic[word]
 	print user_list
 
-def find_friend_user():
-	# Construct word_user_dict(key=word, value=user)
-	word_user_dic = make_word_user_dic(w, 4, 2)
+def find_friend_user(word_user_dic, user_friendship):
 	# Get the word to be searched
 	word = raw_input("type the word tweeted:")
 	# Get the list of users who tweeted word
 	user_list = word_user_dic[word]
-
-	# Construct friendship_dict(key=user, value=friend)
-	user_friendship = make_dic(f, 3, 1)
 	# Make the list of users' friend
 	friend_list = []
 	for i in range(len(user_list)):
@@ -74,25 +59,42 @@ def find_friend_user():
 		friend_list += friends
 	print friend_list
 
-def delete_meantions():
-	return 0
+def delete_meantions(tweet_dic, word_user_dic):
+	# Get the word to be searched
+	word = raw_input("type the word tweeted:")	
+	# Delete the word from tweet_dic
+	user_list = word_user_dic[word]	
+	for user in user_list:
+		try:
+			tweet_dic[user].remove(word)
+		except ValueError:
+			pass	
+	# Delete the word from word_user_dic	
+	try:
+		del word_user_dic[word]
+	except KeyError:
+		pass
+	return tweet_dic, word_user_dic
 
-def delete_user():
-	# Make user list
-	all_users = make_user_list(u, 4)
-	# Construct word_user_dict(key=word, value=user)
-	word_user_dic = make_word_user_dic(w, 4, 2)
+def delete_user(user_friendship, tweet_dic, word_user_dic):
 	# Get the word to be searched
 	word = raw_input("type the tweeted word:")
-	# Get the list of users who tweeted word
-	user_list = word_user_dic[word]	
+	user_list = word_user_dic[word]
+	for user in user_list:
+		try:
+			del user_friendship[user]
+			del tweet_dic[user]
+		except KeyError:
+			pass
+		try:	
+			word_user_dic[word].remove(user)
+		except ValueError:
+			pass
+	return user_friendship, tweet_dic, word_user_dic
 
-	# Delete users
-	for i in range(len(user_list)):
-		all_users.remove(user_list[i])
+def find_scc(user_friendship):
+	make_print_scc(user_friendship)
+	return 0
 
-	print all_users	
-
-
-
-# def fine_scs():
+def shortest_path():
+	return 0
