@@ -1,6 +1,7 @@
 from collections import defaultdict, Counter
 import numpy as np 
 from scc import *
+from dijsktra import *
 
 def readtxt(file):
 	f = open(file,'r')
@@ -87,4 +88,17 @@ def make_print_scc(dic):
 					vertex.add(node)
 	DFS.scc()
 
-def shortest_path()
+def shortest_path(dic, userID):
+	g = Dijkstra()
+	for key in dic.keys():
+		user = g.add_vertex(key)
+		if user.name == userID:
+			user.d = 0
+	for vertex in g.vertices:
+		friends = dic[vertex.name]
+		w = len(dic[vertex.name])
+		for friend in friends:
+			for node in g.vertices:
+				if friend == node.name:
+					vertex.add(node, w)
+	g.shortest_path()

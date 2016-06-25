@@ -96,5 +96,7 @@ def find_scc(user_friendship):
 	make_print_scc(user_friendship)
 	return 0
 
-def shortest_path():
+def find_shortest_path(user_friendship):
+	userID = raw_input("type the user number:")
+	shortest_path(user_friendship, userID)
 	return 0

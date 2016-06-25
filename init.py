@@ -57,8 +57,8 @@ while Menu != '99':
 		find_scc(user_friendship)
 
 	elif Menu == '9':
-		shortest_path(user_friendship)
-
+		find_shortest_path(user_friendship)
+		
 	else: 
 		print "Not available number"
 	print " "	
