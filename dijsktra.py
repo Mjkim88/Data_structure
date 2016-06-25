@@ -203,13 +203,13 @@ class Dijkstra(object):
         i=0
         while i == 0:
             u = q.extract()
-            print ('given user:', vset[u.n].name, end='    ')
+            print ('Given user:', vset[u.n].name, end='    ')
             print ('d:', vset[u.n].d)
             self.relax(vset[u.n])
             i+=1
         for i in range(5):
             u = q.extract()
-            print ('user:', vset[u.n].name, end='    ')
+            print ('User:', vset[u.n].name, end='    ')
             print ('d:', vset[u.n].d)
             i+=1
             self.relax(vset[u.n])
