@@ -1,4 +1,4 @@
-# Data structure Assignemnt Manual
+# Data structure Assignment Manual
 Data Structure Assignment
 
 1. Run init.py first, then you can select the menu you want:
